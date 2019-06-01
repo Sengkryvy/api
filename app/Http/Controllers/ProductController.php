@@ -54,6 +54,7 @@ class ProductController extends Controller
         $product->price = $request->price;
         $product->discount = $request->discount;
         $product->stock = $request->stock;
+        $product->user_id = Auth::id();
         $product->save();
         return response([
             'data' => new ProductResource($product),
