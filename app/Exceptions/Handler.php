@@ -10,6 +10,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Handler extends ExceptionHandler
 {
+    use ExceptionTrait;
     /**
      * A list of the exception types that are not reported.
      *
@@ -50,18 +51,9 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $exception)
     {
         if ($request->expectsJson()) {
-            if ($exception instanceof ModelNotFoundException) {
-                return response([
-                    'errors' => 'Product model not found.',
-                ], Response::HTTP_NOT_FOUND);
-            }
+            return $this->apiException($request, $exception);
         }
 
-        if ($exception instanceof NotFoundHttpException) {
-            return response([
-                'errors' => 'URL is not found.',
-            ], Response::HTTP_NOT_FOUND);
-        }
         return parent::render($request, $exception);
     }
 }
